@@ -14,6 +14,7 @@
 
 #include <llvm/Analysis/LoopInfo.h>
 #include <llvm/Support/raw_ostream.h>
+#include "llvm/IR/Metadata.h"
 
 namespace rv {
   using iter_t = int64_t;
@@ -61,6 +62,8 @@ namespace rv {
     llvm::raw_ostream& print(llvm::raw_ostream & out) const;
     void dump() const;
   };
+
+  void AppendMDEntries(llvm::LLVMContext& ctx, std::vector<llvm::Metadata*>& MDEntries, LoopMD& loopMD);
 
   // Clear all loop vectorize annotations from the loop \p L.
   void ClearLoopVectorizeAnnotations(llvm::Loop & L);

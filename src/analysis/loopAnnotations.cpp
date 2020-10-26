@@ -141,6 +141,15 @@ GetLoopAnnotation(llvm::Loop & L) {
   return OptimisticJoin(std::move(llvmAnnot), std::move(rvAnnot));
 }
 
+// Append metadata from LoopMD to the given metadata vector.
+void
+AppendMDEntries(llvm::LLVMContext& ctx, std::vector<llvm::Metadata*>& MDEntries, LoopMD& loopMD) {
+  if (loopMD.vectorizeEnable.isSet()) {
+    llvm::Metadata *mdVectorizeEnable[] = { llvm::MDString::get(ctx, "llvm.loop.vectorize.enable"),
+                                              llvm::ConstantAsMetadata::get(llvm::ConstantInt::get(llvm::Type::getInt1Ty(ctx), loopMD.vectorizeEnable.get()))};
+    MDEntries.push_back(llvm::MDNode::get(ctx, mdVectorizeEnable));
+  }
+}
 
 // Clear all loop vectorize annotations from the loop \p L.
 void
